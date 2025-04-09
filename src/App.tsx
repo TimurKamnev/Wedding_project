@@ -1,19 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import {
-	Heart,
-	Calendar,
-	MapPin,
-	Phone,
-	Mail,
-	Camera,
-	Music,
-} from 'lucide-react'
+import { Phone, Mail } from 'lucide-react'
 import emailjs from '@emailjs/browser'
 import FadeInOnScroll from './ui/ScrollOnView'
 
 function App() {
 	const [firstName, setFirstName] = useState('')
+	const [attendance, setAttendance] = useState('')
 	const [phoneNumber, setPhoneNumber] = useState('')
+	const [loading, setLoading] = useState(false)
 	const [status, setStatus] = useState('')
 	const [countdown, setCountdown] = useState({
 		days: 0,
@@ -23,7 +17,7 @@ function App() {
 	})
 
 	useEffect(() => {
-		const weddingDate = new Date('2025-06-15T14:00:00').getTime()
+		const weddingDate = new Date('2025-06-06T14:00:00').getTime()
 
 		const timer = setInterval(() => {
 			const now = new Date().getTime()
@@ -44,23 +38,27 @@ function App() {
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
+		setLoading(true)
 		try {
 			await emailjs.send(
-				'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
-				'YOUR_TEMPLATE_ID', // Replace with your EmailJS template ID
+				'service_yr9ppj9',
+				'template_0x9ascb',
 				{
 					from_name: firstName,
 					phone_number: phoneNumber,
-					to_email: 'your-email@example.com', // Replace with your email
+					to_email: 'timurkamnev97@gmail.com',
+					attendance: attendance,
 				},
-				'YOUR_PUBLIC_KEY' // Replace with your EmailJS public key
+				'vzNIxSIYUzo7hv69l'
 			)
-			setStatus('Thank you! We will contact you soon.')
+			setStatus('Спасибо за ответ!')
 			setFirstName('')
 			setPhoneNumber('')
+			setAttendance('')
 		} catch {
-			setStatus('Something went wrong. Please try again later.')
+			setStatus('Что-то пошло не так, попробуйте позже.')
 		}
+		setLoading(false)
 	}
 
 	return (
@@ -78,66 +76,74 @@ function App() {
 				</div>
 			</div>
 
+			{/* Title page section */}
 			<div className='max-w-4xl mx-auto py-14 px-4'>
 				<div className='text-center pb-4 border-b border-black'>
+					<h2 className='text-4xl font-bold mb-6 great-vibes-regular'>
+						Дорогие <br />
+						родные и друзья,
+					</h2>
 					<FadeInOnScroll>
-						<h2 className='text-4xl font-bold mb-8'>
-							Дорогие родные и друзья,
-						</h2>
+						<p className='text-lg font-bold'>06 июня 2025 года</p>
 					</FadeInOnScroll>
 					<FadeInOnScroll>
-						<p className='text-gray-600 text-lg font-bold'>15 июня 2025 года</p>
-					</FadeInOnScroll>
-					<FadeInOnScroll>
-						<p className='text-gray-600 text-lg'>
+						<p className=' md:text-lg text-sm'>
 							в этот день состоится одно из самых важных событий, которое мы
 							хотим разделить с дорогими людьми - свадьба наших детей!
 						</p>
 					</FadeInOnScroll>
-					<h2 className='text-4xl italic mt-4'>Арсен и Уулжан</h2>
+					<h2 className='text-4xl italic mt-3 great-vibes-regular'>
+						Арсен & Уулжан
+					</h2>
 					<FadeInOnScroll>
-						<p className='text-gray-600 text-lg mt-6'>
+						<p className='md:text-lg text-sm mt-6'>
 							Приглашаем вас открыть вместе с нами новую страницу нашей жизни
 						</p>
 					</FadeInOnScroll>
 				</div>
 
-				<div className='text-center pt-6 pb-6 border-b border-black'>
+				<div className='text-center pt-8 pb-12 border-b border-black'>
 					<FadeInOnScroll>
-						<h2 className='text-4xl italic'>
-							Место проведения свадебной церемонии
+						<h2 className='text-4xl italic great-vibes-regular'>
+							Место проведения
+							<br /> свадебной церемонии
 						</h2>
 					</FadeInOnScroll>
 					<FadeInOnScroll>
-						<p className='text-gray-600 text-lg mt-3'>
-							ресторан Шератон, ул.Киевская 148B
-						</p>
+						<p className='text-lg mt-3'>ресторан Ала-Тоо, ул.Малдыбаева 54/1</p>
 					</FadeInOnScroll>
-					<div className='mt-2'>
+					<div className='mt-3'>
 						<FadeInOnScroll>
-							<p className='text-gray-600 font-bold italic text-lg'>
-								Дата: <span className='not-italic font-normal'>15.06.2025</span>
+							<p className='font-bold italic text-3xl great-vibes-regular'>
+								Дата:{' '}
+								<span className='not-italic font-normal font-serif text-base'>
+									06.06.2025
+								</span>
 							</p>
 						</FadeInOnScroll>
 						<FadeInOnScroll>
-							<p className='text-gray-600 font-bold italic text-lg'>
-								Время: <span className='not-italic font-normal'>18:00</span>
+							<p className='font-bold italic text-3xl great-vibes-regular pt-5'>
+								Время:{' '}
+								<span className='not-italic font-normal font-serif text-base'>
+									18:00
+								</span>
 							</p>
 						</FadeInOnScroll>
 					</div>
 					<FadeInOnScroll>
-						<p className='text-gray-600 text-lg mt-6'>
-							Просим быть вовремя и не опаздывать
-						</p>
+						<p className='text-lg mt-4'>Просим быть вовремя и не опаздывать</p>
 					</FadeInOnScroll>
 				</div>
-				<div className='pt-6'>
-					<p className='text-center text-2xl'>
-						С нетерпением ждём встречи с Вами!
-					</p>
-				</div>
+				<FadeInOnScroll>
+					<div className='pt-8'>
+						<p className='text-center md:text-2xl text-lg'>
+							С нетерпением ждём встречи с Вами!
+						</p>
+					</div>
+				</FadeInOnScroll>
 			</div>
 
+			{/* Image */}
 			<div
 				className='h-screen bg-cover bg-center relative'
 				style={{
@@ -151,36 +157,34 @@ function App() {
 			</div>
 
 			{/* Countdown Section */}
-			<div className='bg-rose-50 py-16'>
+			<div className='bg-rose-50 py-20'>
 				<div className='max-w-4xl mx-auto px-4'>
 					<div className='text-center'>
-						<h2 className='text-3xl font-bold mb-8'>
-							Counting Down to Our Big Day
-						</h2>
+						<h2 className='text-3xl mb-8'>До торжества осталось</h2>
 						<div className='grid grid-cols-4 gap-4'>
-							<div className='bg-white p-2 md:p-6 rounded-lg shadow-md'>
+							<div className='bg-white p-2 md:p-6 rounded-lg shadow-md great-vibes-regular'>
 								<div className='text-4xl font-bold text-rose-500'>
 									{countdown.days}
 								</div>
 								<div className='text-gray-600'>Дней</div>
 							</div>
-							<div className='bg-white p-2 md:p-6 rounded-lg shadow-md'>
-								<div className='text-4xl font-bold text-rose-500'>
+							<div className='bg-white p-2 md:p-6 rounded-lg shadow-md great-vibes-regular'>
+								<div className='text-4xl font-bold text-rose-500 '>
 									{countdown.hours}
 								</div>
 								<div className='text-gray-600'>Часов</div>
 							</div>
-							<div className='bg-white p-2 md:p-6 rounded-lg shadow-md'>
+							<div className='bg-white p-2 md:p-6 rounded-lg shadow-md great-vibes-regular'>
 								<div className='text-4xl font-bold text-rose-500'>
 									{countdown.minutes}
 								</div>
-								<div className='text-gray-600'>Мин.</div>
+								<div className='text-gray-600'>Минут</div>
 							</div>
-							<div className='bg-white p-2 md:p-6 rounded-lg shadow-md'>
+							<div className='bg-white p-2 md:p-6 rounded-lg shadow-md great-vibes-regular'>
 								<div className='text-4xl font-bold text-rose-500'>
 									{countdown.seconds}
 								</div>
-								<div className='text-gray-600'>Сек.</div>
+								<div className='text-gray-600'>Секунд</div>
 							</div>
 						</div>
 					</div>
@@ -189,160 +193,160 @@ function App() {
 
 			{/* Details Section */}
 			<div className='max-w-4xl mx-auto py-20 px-4'>
-				<div className='text-center mb-16'>
-					<Heart className='w-12 h-12 mx-auto mb-4 text-rose-500' />
-					<h2 className='text-4xl font-bold mb-8'>Our Special Day</h2>
-					<p className='text-gray-600 text-lg'>
-						Join us in celebrating our love story as we begin our journey
-						together.
-					</p>
+				<div className='text-center mb-12'>
+					<FadeInOnScroll>
+						<h2 className='text-4xl font-bold mb-4 great-vibes-regular'>
+							Дорогие гости,
+						</h2>
+						<p className='text-lg'>мы с нетерпением ждем встречи с вами!</p>
+					</FadeInOnScroll>
+					<FadeInOnScroll>
+						<p className='text-lg mt-4'>
+							Что бы вы могли полностью насладиться праздником,{' '}
+							<strong>мероприятие пройдёт в формате для взрослых</strong>
+						</p>
+					</FadeInOnScroll>
 				</div>
-
-				<div className='grid md:grid-cols-2 gap-12'>
-					<div className='text-center'>
-						<MapPin className='w-8 h-8 mx-auto mb-4 text-rose-500' />
-						<h3 className='text-2xl font-semibold mb-2'>
-							Ceremony & Reception
-						</h3>
-						<p className='text-gray-600'>
-							The Grand Plaza Hotel
-							<br />
-							123 Wedding Lane
-							<br />
-							New York, NY 10001
+				<FadeInOnScroll>
+					<div>
+						<p className='text-center text-lg'>
+							Просим оставить детей дома
+							<br /> надеемся на ваше понимание
 						</p>
 					</div>
-					<div className='text-center'>
-						<Calendar className='w-8 h-8 mx-auto mb-4 text-rose-500' />
-						<h3 className='text-2xl font-semibold mb-2'>When</h3>
-						<p className='text-gray-600'>
-							June 15, 2025
-							<br />
-							Ceremony: 2:00 PM
-							<br />
-							Reception: 5:00 PM
-						</p>
-					</div>
-				</div>
+				</FadeInOnScroll>
 			</div>
 
-			{/* Photography Section */}
-			<div className='bg-gray-50 py-20'>
-				<div className='max-w-4xl mx-auto px-4'>
-					<div className='text-center mb-12'>
-						<Camera className='w-12 h-12 mx-auto mb-4 text-rose-500' />
-						<h2 className='text-4xl font-bold mb-4'>Capture the Moments</h2>
-						<p className='text-gray-600'>
-							Share your photos with us using our wedding hashtag
-						</p>
-						<p className='text-2xl font-bold text-rose-500 mt-4'>
-							#SarahAndMichael2024
-						</p>
-					</div>
-					<div className='grid grid-cols-3 gap-4'>
-						<img
-							src='https://images.unsplash.com/photo-1511285560929-80b456fea0bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
-							alt='Wedding'
-							className='rounded-lg shadow-md'
-						/>
-						<img
-							src='https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
-							alt='Wedding'
-							className='rounded-lg shadow-md'
-						/>
-						<img
-							src='https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
-							alt='Wedding'
-							className='rounded-lg shadow-md'
-						/>
-					</div>
-				</div>
-			</div>
-
-			{/* Entertainment Section */}
-			<div className='py-20'>
-				<div className='max-w-4xl mx-auto px-4'>
-					<div className='text-center mb-12'>
-						<Music className='w-12 h-12 mx-auto mb-4 text-rose-500' />
-						<h2 className='text-4xl font-bold mb-4'>Entertainment</h2>
-						<p className='text-gray-600 mb-8'>
-							Dance the night away with live music and entertainment
-						</p>
-						<div className='grid md:grid-cols-2 gap-8'>
-							<div className='bg-white p-8 rounded-lg shadow-md'>
-								<h3 className='text-2xl font-semibold mb-4'>Ceremony Music</h3>
-								<p className='text-gray-600'>
-									Classical string quartet performing your favorite romantic
-									pieces
-								</p>
-							</div>
-							<div className='bg-white p-8 rounded-lg shadow-md'>
-								<h3 className='text-2xl font-semibold mb-4'>Reception Band</h3>
-								<p className='text-gray-600'>
-									Live band playing a mix of classic hits and modern favorites
-								</p>
-							</div>
-						</div>
-					</div>
+			{/* Image */}
+			<div
+				className='h-screen bg-cover bg-center relative'
+				style={{
+					backgroundImage:
+						'url("https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-1.2.1&auto=format&fit=crop&w=2850&q=80")',
+				}}
+			>
+				<div className='absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center'>
+					<div className='text-center text-white'></div>
 				</div>
 			</div>
 
 			{/* Contact Form */}
-			<div className='bg-gray-50 py-20 px-4'>
-				<div className='max-w-md mx-auto'>
-					<div className='text-center mb-8'>
-						<h2 className='text-3xl font-bold mb-4'>RSVP</h2>
-						<p className='text-gray-600'>
-							Please let us know if you'll be joining us on our special day.
-						</p>
-					</div>
-
-					<form onSubmit={handleSubmit} className='space-y-6'>
-						<div>
-							<label
-								htmlFor='firstName'
-								className='block text-sm font-medium text-gray-700'
-							>
-								First Name
-							</label>
-							<input
-								type='text'
-								id='firstName'
-								value={firstName}
-								onChange={e => setFirstName(e.target.value)}
-								className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-rose-500 focus:ring-rose-500 sm:text-sm'
-								required
-							/>
+			<FadeInOnScroll>
+				<div className='py-20 px-4'>
+					<div className='max-w-md mx-auto'>
+						<div className='text-center mb-12'>
+							<h2 className='text-3xl font-bold mb-7 great-vibes-regular'>
+								Пожалуйста подтвердите <br /> ваше присутствие на нашем
+								торжестве
+							</h2>
+							<p className=''>Будем ждать ответа до 01.06.2025</p>
 						</div>
 
-						<div>
-							<label
-								htmlFor='phoneNumber'
-								className='block text-sm font-medium text-gray-700'
-							>
-								Phone Number
-							</label>
-							<input
-								type='tel'
-								id='phoneNumber'
-								value={phoneNumber}
-								onChange={e => setPhoneNumber(e.target.value)}
-								className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-rose-500 focus:ring-rose-500 sm:text-sm'
-								required
-							/>
-						</div>
-
-						<button
-							type='submit'
-							className='w-full bg-rose-500 text-white py-2 px-4 rounded-md hover:bg-rose-600 transition duration-200'
+						<form
+							onSubmit={handleSubmit}
+							className='space-y-6 bg-rose-50 p-5 rounded-xl'
 						>
-							Send RSVP
-						</button>
+							<div>
+								<label
+									htmlFor='firstName'
+									className='block text-base font-medium'
+								>
+									Имя
+								</label>
+								<input
+									type='text'
+									id='firstName'
+									value={firstName}
+									onChange={e => setFirstName(e.target.value)}
+									className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-rose-500 focus:ring-rose-500 sm:text-sm p-3'
+									required
+								/>
+							</div>
 
-						{status && (
-							<p className='text-center text-sm mt-4 text-gray-600'>{status}</p>
-						)}
-					</form>
+							<div>
+								<label
+									htmlFor='phoneNumber'
+									className='block text-base font-medium'
+								>
+									Номер телефона
+								</label>
+								<input
+									type='tel'
+									id='phoneNumber'
+									value={phoneNumber}
+									onChange={e => setPhoneNumber(e.target.value)}
+									className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-rose-500 focus:ring-rose-500 sm:text-sm p-3'
+									required
+								/>
+							</div>
+
+							<div className='flex flex-col gap-3'>
+								<div>
+									<input
+										name='chose'
+										type='radio'
+										value='Я с удовольствием приду'
+										id='customRadioInline1'
+										checked={attendance === 'Я с удовольствием приду'}
+										onChange={e => setAttendance(e.target.value)}
+										required
+									/>
+									<label className='pl-3' htmlFor='customRadioInline1'>
+										Я с удовольствием приду
+									</label>
+								</div>
+								<div>
+									<input
+										name='chose'
+										type='radio'
+										value='К сожалению, не смогу присутствовать'
+										id='customRadioInline2'
+										checked={
+											attendance === 'К сожалению, не смогу присутствовать'
+										}
+										onChange={e => setAttendance(e.target.value)}
+									/>
+									<label className='pl-3' htmlFor='customRadioInline2'>
+										К сожалению, не смогу присутствовать
+									</label>
+								</div>
+							</div>
+
+							<button
+								type='submit'
+								disabled={loading}
+								className='w-full bg-rose-500 text-white py-2 px-4 rounded-md hover:bg-rose-600 transition duration-200'
+							>
+								{loading ? 'Отправка...' : 'Отправить'}
+							</button>
+
+							{status && (
+								<p className='text-center text-lg mt-4 text-gray-600'>
+									{status}
+								</p>
+							)}
+						</form>
+					</div>
+				</div>
+			</FadeInOnScroll>
+
+			{/* highness */}
+			<div className='pb-6'>
+				<h1 className='text-center text-3xl italic great-vibes-regular'>
+					С уважением Арсен и Уулжан
+				</h1>
+			</div>
+
+			{/* Image */}
+			<div
+				className='h-screen bg-cover bg-center relative'
+				style={{
+					backgroundImage:
+						'url("https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-1.2.1&auto=format&fit=crop&w=2850&q=80")',
+				}}
+			>
+				<div className='absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center'>
+					<div className='text-center text-white'></div>
 				</div>
 			</div>
 
@@ -353,7 +357,9 @@ function App() {
 						<Phone className='w-6 h-6' />
 						<Mail className='w-6 h-6' />
 					</div>
-					<p className='text-gray-400'>We can't wait to celebrate with you!</p>
+					<p className='text-2xl great-vibes-regular'>
+						Ждем не дождемся отпраздновать с вами!
+					</p>
 				</div>
 			</footer>
 		</div>
