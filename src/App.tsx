@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Phone, Mail } from 'lucide-react'
 import emailjs from '@emailjs/browser'
 import FadeInOnScroll from './ui/ScrollOnView'
+import 'react-phone-number-input/style.css'
+import { Controller, useForm } from 'react-hook-form'
+import { useIMask } from 'react-imask'
 
 function App() {
 	const [firstName, setFirstName] = useState('')
@@ -15,29 +18,21 @@ function App() {
 		minutes: 0,
 		seconds: 0,
 	})
+	const inputRef = useRef<HTMLInputElement | null>(null)
 
-	useEffect(() => {
-		const weddingDate = new Date('2025-06-06T14:00:00').getTime()
+	const { control, handleSubmit } = useForm<{ phoneNumber: string }>({
+		defaultValues: {
+			phoneNumber: phoneNumber,
+		},
+	})
 
-		const timer = setInterval(() => {
-			const now = new Date().getTime()
-			const distance = weddingDate - now
+	const mask = useIMask({
+		mask: '+{996} 000 000 000',
+		lazy: false,
+		placeholderChar: '*',
+	})
 
-			setCountdown({
-				days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-				hours: Math.floor(
-					(distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-				),
-				minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-				seconds: Math.floor((distance % (1000 * 60)) / 1000),
-			})
-		}, 1000)
-
-		return () => clearInterval(timer)
-	}, [])
-
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault()
+	const handleSubmitter = async (phoneNumber: string) => {
 		setLoading(true)
 		try {
 			await emailjs.send(
@@ -60,6 +55,30 @@ function App() {
 		}
 		setLoading(false)
 	}
+
+	const onSubmitForm = handleSubmit(data => {
+		handleSubmitter(data.phoneNumber)
+	})
+
+	useEffect(() => {
+		const weddingDate = new Date('2025-06-06T14:00:00').getTime()
+
+		const timer = setInterval(() => {
+			const now = new Date().getTime()
+			const distance = weddingDate - now
+
+			setCountdown({
+				days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+				hours: Math.floor(
+					(distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+				),
+				minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+				seconds: Math.floor((distance % (1000 * 60)) / 1000),
+			})
+		}, 1000)
+
+		return () => clearInterval(timer)
+	}, [])
 
 	return (
 		<div className='min-h-screen bg-white'>
@@ -243,7 +262,7 @@ function App() {
 						</div>
 
 						<form
-							onSubmit={handleSubmit}
+							onSubmit={onSubmitForm}
 							className='space-y-6 bg-rose-50 p-5 rounded-xl'
 						>
 							<div>
@@ -270,13 +289,47 @@ function App() {
 								>
 									Номер телефона
 								</label>
-								<input
-									type='tel'
-									id='phoneNumber'
+								{/* <PhoneInput
+									defaultCountry='KG'
+									placeholder='Введите номер телефона'
 									value={phoneNumber}
-									onChange={e => setPhoneNumber(e.target.value)}
-									className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-rose-500 focus:ring-rose-500 sm:text-sm p-3'
+									onChange={setPhoneNumber}
 									required
+								/> */}
+								<Controller
+									control={control}
+									name='phoneNumber'
+									rules={{
+										required: true,
+										minLength: 12,
+									}}
+									render={({ field }) => (
+										<input
+											className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-rose-500 focus:ring-rose-500 sm:text-sm p-3'
+											ref={el => {
+												inputRef.current = el
+												if (el) {
+													mask.ref.current = el
+												}
+											}}
+											name={field.name}
+											onBlur={field.onBlur}
+											id='phoneNumber'
+											type='tel'
+											onInput={() =>
+												field.onChange({
+													target: { value: mask.unmaskedValue },
+												})
+											}
+											onChange={() =>
+												field.onChange({
+													target: { value: mask.unmaskedValue },
+												})
+											}
+											value={mask.value || field.value}
+											required
+										/>
+									)}
 								/>
 							</div>
 
